@@ -60,7 +60,11 @@ const App: React.FC = () => {
         throw new Error('Failed to fetch tasks');
       }
       const data = await response.json();
-      setTasks(data);
+      if (Array.isArray(data)) {
+        setTasks(data);
+      } else {
+        throw new Error('API response did not return a list of tasks. Check that VITE_API_URL ends with "/api/tasks".');
+      }
     } catch (error: any) {
       console.error(error);
       addToast('error', error.message || 'Unable to connect to the backend server.');
