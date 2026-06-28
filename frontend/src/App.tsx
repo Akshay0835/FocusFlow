@@ -57,7 +57,15 @@ const App: React.FC = () => {
       // Fetch all tasks and filter/sort client-side for instantaneous UX & stats precision
       const response = await fetch(API_BASE_URL);
       if (!response.ok) {
-        throw new Error('Failed to fetch tasks');
+        let errorMsg = 'Failed to fetch tasks';
+        try {
+          const errData = await response.json();
+          errorMsg = errData.message || errorMsg;
+          if (errData.error) {
+            errorMsg += `: ${errData.error}`;
+          }
+        } catch (_) {}
+        throw new Error(errorMsg);
       }
       const data = await response.json();
       if (Array.isArray(data)) {
