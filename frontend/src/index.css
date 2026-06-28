@@ -386,10 +386,16 @@ body {
   }
 }
 
-/* Sticky Form container */
+/* Form container (Sticky on desktop, static on mobile) */
 .sticky-form {
-  position: sticky;
-  top: 1.5rem;
+  position: static;
+}
+
+@media (min-width: 900px) {
+  .sticky-form {
+    position: sticky;
+    top: 1.5rem;
+  }
 }
 
 .form-wrapper {
