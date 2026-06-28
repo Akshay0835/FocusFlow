@@ -12,6 +12,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005/api/
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [taskToDeleteId, setTaskToDeleteId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState<Toast[]>([]);
   
@@ -184,10 +185,13 @@ const App: React.FC = () => {
     }
   };
 
-  // Delete Task Action
-  const handleDeleteTask = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this task?')) return;
+  // Trigger Delete confirmation modal
+  const handleDeleteTask = (id: string) => {
+    setTaskToDeleteId(id);
+  };
 
+  // Actual Delete API Action
+  const executeDeleteTask = async (id: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'DELETE'
@@ -331,6 +335,35 @@ const App: React.FC = () => {
           />
         </section>
       </main>
+
+      {/* Custom native confirmation modal */}
+      {taskToDeleteId && (
+        <div className="modal-overlay" onClick={() => setTaskToDeleteId(null)}>
+          <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to permanently delete this task? This action cannot be undone.</p>
+            <div className="modal-buttons">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setTaskToDeleteId(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => {
+                  executeDeleteTask(taskToDeleteId);
+                  setTaskToDeleteId(null);
+                }}
+              >
+                Delete Task
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Micro notifications toast layer */}
       <Notification toasts={toasts} onClose={removeToast} />

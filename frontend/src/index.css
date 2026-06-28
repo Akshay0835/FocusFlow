@@ -1012,3 +1012,76 @@ body {
   from { width: 100%; }
   to { width: 0%; }
 }
+
+/* Custom Glassmorphic Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(7, 8, 15, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 420px;
+  padding: 2.25rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-content h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.modal-content p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  color: white;
+  box-shadow: 0 4px 15px var(--danger-glow);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--danger-glow);
+}
+
+.btn-danger:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
