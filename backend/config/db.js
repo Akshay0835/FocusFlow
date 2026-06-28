@@ -8,8 +8,8 @@ const connectDB = async () => {
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
-    console.log('Ensure your MongoDB server is running or the MONGODB_URI in backend/.env is correct.');
-    process.exit(1);
+    console.log('Ensure your MongoDB server is running or the MONGODB_URI is correct.');
+    // Do not throw or exit in serverless environment to prevent function crash on require
   }
 };
 
