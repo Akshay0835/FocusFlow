@@ -215,6 +215,14 @@ const App: React.FC = () => {
   const handleToggleStatus = async (task: Task) => {
     const nextStatus = task.status === 'completed' ? 'pending' : 'completed';
     
+    // Save original state for potential rollback
+    const originalTasks = [...tasks];
+    
+    // Optimistically update status in state instantly
+    setTasks((prev) => 
+      prev.map((t) => (t._id === task._id ? { ...t, status: nextStatus } : t))
+    );
+    
     try {
       const response = await fetch(`${API_BASE_URL}/${task._id}`, {
         method: 'PUT',
@@ -230,6 +238,7 @@ const App: React.FC = () => {
         throw new Error(updatedTask.message || 'Failed to update task status');
       }
 
+      // Sync state with actual server payload
       setTasks((prev) => prev.map((t) => (t._id === task._id ? updatedTask : t)));
       
       if (nextStatus === 'completed') {
@@ -240,6 +249,8 @@ const App: React.FC = () => {
     } catch (error: any) {
       console.error(error);
       addToast('error', error.message || 'Failed to update status.');
+      // Rollback to original state on failure
+      setTasks(originalTasks);
     }
   };
 
